@@ -1623,7 +1623,7 @@ which can be fed into `org-caldav-insert-org-entry'."
     (erase-buffer)
     (set-buffer-multibyte t)
     (setq buffer-file-coding-system 'utf-8)
-    (insert decoded))
+    (insert (replace-regexp-in-string "LOCATION;" "LOCATION:" decoded)))
   (goto-char (point-min))
   (let* ((calendar-date-style 'european)
 	 (ical-list (icalendar--read-element nil nil))
@@ -1664,7 +1664,7 @@ which can be fed into `org-caldav-insert-org-entry'."
 	 (rrule (icalendar--get-event-property e 'RRULE))
 	 (freq (when (and rrule (string-match ".*FREQ=\\(.*\\);" rrule))
 		 (concat "+" (save-match-data
-			       (if (string-match ".*INTERVAL=\\(.*\\);.*" rrule)
+			       (if (string-match ".*INTERVAL=\\(.*\\).*" rrule)
 				   (match-string 1 rrule) "1"))
 			 (save-match-data
 			   (and (string-match ".*FREQ=\\(.*\\);.*" rrule)
